@@ -19,6 +19,11 @@ public class Client {
         this.lastname = lastname;
     }
 
+    public Client(String name, String lastname) {
+        this.name = name;
+        this.lastname = lastname;
+    }
+
     public Client() {
     }
 
