@@ -3,7 +3,9 @@ package com.iffat.springboot.association.entities;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "clients")
@@ -24,10 +26,10 @@ public class Client {
             inverseJoinColumns = @JoinColumn(name = "address_id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"address_id"})
     )
-    private List<Address> addresses;
+    private Set<Address> addresses;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "client")
-    private List<Invoice> invoices;
+    private Set<Invoice> invoices;
 
     public Client(Long id, String name, String lastname) {
         this();
@@ -43,8 +45,8 @@ public class Client {
     }
 
     public Client() {
-        addresses = new ArrayList<>();
-        invoices = new ArrayList<>();
+        addresses = new HashSet<>();
+        invoices = new HashSet<>();
     }
 
     public Long getId() {
@@ -71,19 +73,19 @@ public class Client {
         this.lastname = lastname;
     }
 
-    public List<Address> getAddresses() {
+    public Set<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
 
-    public List<Invoice> getInvoices() {
+    public Set<Invoice> getInvoices() {
         return invoices;
     }
 
-    public void setInvoices(List<Invoice> invoices) {
+    public void setInvoices(Set<Invoice> invoices) {
         this.invoices = invoices;
     }
 

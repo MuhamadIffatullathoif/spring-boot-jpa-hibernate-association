@@ -10,9 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @SpringBootApplication
 public class SpringBootHibernateJpaAssociationApplication implements CommandLineRunner {
@@ -34,8 +32,23 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
         // oneToMany();
         // oneToManyFindByIdClient();
         // removeAddress();
-        // removeAddressFindById();
-        oneToManyInvoiceBiDirectional();
+         removeAddressFindById();
+        // oneToManyInvoiceBiDirectional();
+        // oneToManyInvoiceBiDirectionalFindById();
+    }
+
+    public void oneToManyInvoiceBiDirectionalFindById() {
+        Optional<Client> optionalClient = clientRepository.findOne(1L);
+
+        optionalClient.ifPresent(optClient -> {
+            Invoice invoice1 = new Invoice("Invoice Office", 2000L);
+            Invoice invoice2 = new Invoice("Invoice Sport", 1000L);
+
+            optClient.addInvoice(invoice1).addInvoice(invoice2);
+
+            Client clientDB = clientRepository.save(optClient);
+            System.out.println(clientDB);
+        });
     }
 
     public void oneToManyInvoiceBiDirectional() {
@@ -60,8 +73,10 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
         optionalClient.ifPresent(optClient -> {
             Address address1 = new Address("Sabaody", 1234);
             Address address2 = new Address("Alabasta", 5678);
-
-            optClient.setAddresses(Arrays.asList(address1, address2));
+            Set<Address> addresses = new HashSet<>();
+            addresses.add(address1);
+            addresses.add(address2);
+            optClient.setAddresses(addresses);
 
             Client clientDB = clientRepository.save(optClient);
             System.out.println(clientDB);
@@ -81,7 +96,10 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
         Address address1 = new Address("Sabaody", 1234);
         Address address2 = new Address("Alabasta", 5678);
 
-        client.setAddresses(Arrays.asList(address1, address2));
+        Set<Address> addresses = new HashSet<>();
+        addresses.add(address1);
+        addresses.add(address2);
+        client.setAddresses(addresses);
 
         Client clientDB = clientRepository.save(client);
         System.out.println(clientDB);
@@ -100,7 +118,10 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
             Address address1 = new Address("Sabaody", 1234);
             Address address2 = new Address("Alabasta", 5678);
 
-            client.setAddresses(Arrays.asList(address1, address2));
+            Set<Address> addresses = new HashSet<>();
+            addresses.add(address1);
+            addresses.add(address2);
+            client.setAddresses(addresses);
 
             Client clientDB = clientRepository.save(client);
             System.out.println(clientDB);
