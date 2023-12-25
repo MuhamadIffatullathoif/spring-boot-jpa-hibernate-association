@@ -13,6 +13,9 @@ public class Invoice {
     private String description;
     private Long total;
 
+    @ManyToOne
+    private Client client;
+
     public Invoice() {
     }
 
@@ -44,5 +47,15 @@ public class Invoice {
 
     public void setTotal(Long total) {
         this.total = total;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", total=" + total +
+                ", client=" + client +
+                '}';
     }
 }
