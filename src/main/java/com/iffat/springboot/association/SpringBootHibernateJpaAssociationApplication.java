@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @SpringBootApplication
@@ -29,7 +30,21 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
     public void run(String... args) throws Exception {
         // manyToOne();
         // manyToOneFindByIdClient();
-        oneToMany();
+        // oneToMany();
+        oneToManyFindByIdClient();
+    }
+
+    public void oneToManyFindByIdClient() {
+        Optional<Client> optionalClient = clientRepository.findById(2L);
+        optionalClient.ifPresent(client -> {
+            Address address1 = new Address("Sabaody",1234);
+            Address address2 = new Address("Alabasta",5678);
+
+            client.setAddresses(Arrays.asList(address1, address2));
+
+            Client clientDB = clientRepository.save(client);
+            System.out.println(clientDB);
+        });
     }
 
     public void oneToMany() {
