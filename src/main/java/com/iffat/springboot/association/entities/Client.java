@@ -2,6 +2,9 @@ package com.iffat.springboot.association.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "clients")
 public class Client {
@@ -13,6 +16,9 @@ public class Client {
     private String name;
     private String lastname;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses;
+
     public Client(Long id, String name, String lastname) {
         this.id = id;
         this.name = name;
@@ -20,11 +26,13 @@ public class Client {
     }
 
     public Client(String name, String lastname) {
+        this();
         this.name = name;
         this.lastname = lastname;
     }
 
     public Client() {
+        addresses = new ArrayList<>();
     }
 
     public Long getId() {
@@ -51,12 +59,21 @@ public class Client {
         this.lastname = lastname;
     }
 
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
     @Override
     public String toString() {
         return "{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", lastname='" + lastname + '\'' +
+                ", addresses='" + addresses + '\'' +
                 '}';
     }
 }
