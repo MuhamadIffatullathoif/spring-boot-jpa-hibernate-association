@@ -13,7 +13,9 @@ public class Invoice {
     private String description;
     private Long total;
 
+    // join column if not added will have default client_id the function of join column to customize name foreign key
     @ManyToOne
+    @JoinColumn(name = "client_id")
     private Client client;
 
     public Invoice() {
