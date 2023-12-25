@@ -43,7 +43,31 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
         // removeInvoiceBiDirectionalFindById();
         // removeInvoiceBiDirectional();
         // oneToOne();
-        oneToOneFindById();
+        // oneToOneFindById();
+        // oneToOneBidirectional();
+        oneToOneBidirectionalFindById();
+    }
+
+    public void oneToOneBidirectionalFindById() {
+        Optional<Client> optionalClient = clientRepository.findOne(1L);
+
+        optionalClient.ifPresent(client -> {
+            ClientDetails clientDetails = new ClientDetails(true, 5000);
+            client.setClientDetails(clientDetails);
+            Client clientDB = clientRepository.save(client);
+            System.out.println(clientDB);
+        });
+    }
+
+    public void oneToOneBidirectional() {
+        Client client = new Client("Jhon","Doe");
+
+        ClientDetails clientDetails = new ClientDetails(true, 5000);
+
+        client.setClientDetails(clientDetails);
+
+        Client clientDB = clientRepository.save(client);
+        System.out.println(clientDB);
     }
 
     public void oneToOneFindById() {
