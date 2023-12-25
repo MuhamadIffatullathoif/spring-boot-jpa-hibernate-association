@@ -32,9 +32,67 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
         // oneToMany();
         // oneToManyFindByIdClient();
         // removeAddress();
-         removeAddressFindById();
+        // removeAddressFindById();
         // oneToManyInvoiceBiDirectional();
         // oneToManyInvoiceBiDirectionalFindById();
+        // removeInvoiceBiDirectionalFindById();
+        removeInvoiceBiDirectional();
+    }
+
+    public void removeInvoiceBiDirectional() {
+        Client client = new Client("Jhon","Doe");
+
+        Invoice invoice1 = new Invoice("Invoice Sport",200L);
+        Invoice invoice2 = new Invoice("Invoice Office", 300L);
+
+        client.addInvoice(invoice1).addInvoice(invoice2);
+
+        Client clientDB = clientRepository.save(client);
+        System.out.println(clientDB);
+
+        Optional<Client> optionalClientDB = clientRepository.findOne(3L);
+
+        optionalClientDB.ifPresent(optClient -> {
+            Optional<Invoice> optionalInvoiceDB = invoiceRepository.findById(2L);
+
+            optionalInvoiceDB.ifPresent(optInvoice -> {
+                optClient.remove(optInvoice);
+                Client clientDB1 = clientRepository.save(optClient);
+                System.out.println(clientDB1);
+            });
+        });
+    }
+
+    public void removeInvoiceBiDirectionalFindById() {
+        Optional<Client> optionalClient = clientRepository.findOne(1L);
+
+        optionalClient.ifPresent(optClient -> {
+
+            Invoice invoice1 = new Invoice("Invoice Sport",200L);
+            Invoice invoice2 = new Invoice("Invoice Office", 300L);
+
+            optClient.addInvoice(invoice1).addInvoice(invoice2);
+
+            Client clientDB = clientRepository.save(optClient);
+            System.out.println(clientDB);
+        });
+
+        Optional<Client> optionalClient2 = clientRepository.findOne(1L);
+        optionalClient2.ifPresent(optClient -> {
+            Invoice invoice3 = new Invoice("Invoice Sport",200L);
+            invoice3.setId(2L);
+
+            // Optional<Invoice> optionalInvoice = invoiceRepository.findById(2L);
+            Optional<Invoice> optionalInvoice = Optional.of(invoice3);
+
+            optionalInvoice.ifPresent(optInvoice -> {
+                // optClient.remove(optInvoice);
+                optClient.getInvoices().remove(optInvoice);
+                optInvoice.setClient(null);
+                Client clientDB = clientRepository.save(optClient);
+                System.out.println(clientDB);
+            });
+        });
     }
 
     public void oneToManyInvoiceBiDirectionalFindById() {

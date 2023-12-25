@@ -105,4 +105,9 @@ public class Client {
                 ", invoices='" + invoices + '\'' +
                 '}';
     }
+
+    public void remove(Invoice invoice) {
+        this.getInvoices().remove(invoice);
+        invoice.setClient(null);
+    }
 }
