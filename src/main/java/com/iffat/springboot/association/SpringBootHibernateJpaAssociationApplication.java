@@ -9,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Optional;
+
 @SpringBootApplication
 public class SpringBootHibernateJpaAssociationApplication implements CommandLineRunner {
 
@@ -24,10 +26,27 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
 
     @Override
     public void run(String... args) throws Exception {
+        // manyToOne();
+        manyToOneFindByIdClient();
+    }
+
+    public void manyToOne(){
         Client client = new Client("Jhon","Doe");
         clientRepository.save(client);
         Invoice invoice = new Invoice("Invoice Office",2000L);
         invoice.setClient(client);
-        invoiceRepository.save(invoice);
+        Invoice invoiceDB = invoiceRepository.save(invoice);
+        System.out.println(invoiceDB);
+    }
+
+    public void manyToOneFindByIdClient(){
+        Optional<Client> optionalClient = clientRepository.findById(1L);
+        if(optionalClient.isPresent()) {
+            Client client = optionalClient.orElseThrow();
+            Invoice invoice = new Invoice("Invoice Office", 2000L);
+            invoice.setClient(client);
+            Invoice invoiceDB = invoiceRepository.save(invoice);
+            System.out.println(invoiceDB);
+        }
     }
 }
