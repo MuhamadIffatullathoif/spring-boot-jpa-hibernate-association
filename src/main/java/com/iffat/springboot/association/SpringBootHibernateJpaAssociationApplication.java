@@ -2,7 +2,9 @@ package com.iffat.springboot.association;
 
 import com.iffat.springboot.association.entities.Address;
 import com.iffat.springboot.association.entities.Client;
+import com.iffat.springboot.association.entities.ClientDetails;
 import com.iffat.springboot.association.entities.Invoice;
+import com.iffat.springboot.association.repositories.ClientDetailsRepository;
 import com.iffat.springboot.association.repositories.ClientRepository;
 import com.iffat.springboot.association.repositories.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
     @Autowired
     private InvoiceRepository invoiceRepository;
 
+    @Autowired
+    private ClientDetailsRepository clientDetailsRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(SpringBootHibernateJpaAssociationApplication.class, args);
     }
@@ -36,7 +41,32 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
         // oneToManyInvoiceBiDirectional();
         // oneToManyInvoiceBiDirectionalFindById();
         // removeInvoiceBiDirectionalFindById();
-        removeInvoiceBiDirectional();
+        // removeInvoiceBiDirectional();
+        // oneToOne();
+        oneToOneFindById();
+    }
+
+    public void oneToOneFindById() {
+        ClientDetails clientDetails = new ClientDetails(true, 5000);
+        clientDetailsRepository.save(clientDetails);
+
+        Optional<Client> optionalClient = clientRepository.findOne(2L);
+        optionalClient.ifPresent(client -> {
+            client.setClientDetails(clientDetails);
+            Client clientDB = clientRepository.save(client);
+            System.out.println(clientDB);
+        });
+    }
+
+    public void oneToOne() {
+
+        ClientDetails clientDetails = new ClientDetails(true, 5000);
+        clientDetailsRepository.save(clientDetails);
+
+        Client client = new Client("Jhon","Doe");
+        client.setClientDetails(clientDetails);
+        Client clientDB = clientRepository.save(client);
+        System.out.println(clientDB);
     }
 
     public void removeInvoiceBiDirectional() {

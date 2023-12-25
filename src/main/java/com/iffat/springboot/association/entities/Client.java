@@ -31,6 +31,9 @@ public class Client {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "client")
     private Set<Invoice> invoices;
 
+    @OneToOne
+    private ClientDetails clientDetails;
+
     public Client(Long id, String name, String lastname) {
         this();
         this.id = id;
@@ -95,6 +98,14 @@ public class Client {
         return this;
     }
 
+    public ClientDetails getClientDetails() {
+        return clientDetails;
+    }
+
+    public void setClientDetails(ClientDetails clientDetails) {
+        this.clientDetails = clientDetails;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -103,6 +114,7 @@ public class Client {
                 ", lastname='" + lastname + '\'' +
                 ", addresses='" + addresses + '\'' +
                 ", invoices='" + invoices + '\'' +
+                ", clientDetails='" + clientDetails + '\'' +
                 '}';
     }
 
