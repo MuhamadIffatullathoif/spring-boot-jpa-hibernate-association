@@ -1,5 +1,6 @@
 package com.iffat.springboot.association;
 
+import com.iffat.springboot.association.entities.Address;
 import com.iffat.springboot.association.entities.Client;
 import com.iffat.springboot.association.entities.Invoice;
 import com.iffat.springboot.association.repositories.ClientRepository;
@@ -27,7 +28,19 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
     @Override
     public void run(String... args) throws Exception {
         // manyToOne();
-        manyToOneFindByIdClient();
+        // manyToOneFindByIdClient();
+        oneToMany();
+    }
+
+    public void oneToMany() {
+        Client client = new Client("Jhon","Doe");
+
+        Address address1 = new Address("Sabaody",1234);
+        Address address2 = new Address("Alabasta",5678);
+        client.getAddresses().add(address1);
+        client.getAddresses().add(address2);
+        Client clientDB = clientRepository.save(client);
+        System.out.println(clientDB);
     }
 
     public void manyToOne(){
