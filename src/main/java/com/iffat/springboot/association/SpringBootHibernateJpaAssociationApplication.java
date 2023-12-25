@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootApplication
@@ -33,7 +34,24 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
         // oneToMany();
         // oneToManyFindByIdClient();
         // removeAddress();
-        removeAddressFindById();
+        // removeAddressFindById();
+        oneToManyInvoiceBiDirectional();
+    }
+
+    public void oneToManyInvoiceBiDirectional(){
+        Client client = new Client("Jhon", "Doe");
+
+        Invoice invoice1 = new Invoice("Invoice Office", 2000L);
+        Invoice invoice2 = new Invoice("Invoice Sport", 1000L);
+
+        List<Invoice> invoices = Arrays.asList(invoice1, invoice2);
+        client.setInvoices(invoices);
+
+        invoice1.setClient(client);
+        invoice2.setClient(client);
+
+        Client clientDB = clientRepository.save(client);
+        System.out.println(clientDB);
     }
 
     public void removeAddressFindById() {
