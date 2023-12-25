@@ -38,17 +38,18 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
         oneToManyInvoiceBiDirectional();
     }
 
-    public void oneToManyInvoiceBiDirectional(){
+    public void oneToManyInvoiceBiDirectional() {
         Client client = new Client("Jhon", "Doe");
 
         Invoice invoice1 = new Invoice("Invoice Office", 2000L);
         Invoice invoice2 = new Invoice("Invoice Sport", 1000L);
 
-        List<Invoice> invoices = Arrays.asList(invoice1, invoice2);
-        client.setInvoices(invoices);
-
-        invoice1.setClient(client);
-        invoice2.setClient(client);
+//        List<Invoice> invoices = Arrays.asList(invoice1, invoice2);
+//        client.setInvoices(invoices);
+//
+//        invoice1.setClient(client);
+//        invoice2.setClient(client);
+        client.addInvoice(invoice1).addInvoice(invoice2);
 
         Client clientDB = clientRepository.save(client);
         System.out.println(clientDB);
@@ -57,8 +58,8 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
     public void removeAddressFindById() {
         Optional<Client> optionalClient = clientRepository.findById(1L);
         optionalClient.ifPresent(optClient -> {
-            Address address1 = new Address("Sabaody",1234);
-            Address address2 = new Address("Alabasta",5678);
+            Address address1 = new Address("Sabaody", 1234);
+            Address address2 = new Address("Alabasta", 5678);
 
             optClient.setAddresses(Arrays.asList(address1, address2));
 
@@ -75,10 +76,10 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
     }
 
     public void removeAddress() {
-        Client client = new Client("Jhon","Doe");
+        Client client = new Client("Jhon", "Doe");
 
-        Address address1 = new Address("Sabaody",1234);
-        Address address2 = new Address("Alabasta",5678);
+        Address address1 = new Address("Sabaody", 1234);
+        Address address2 = new Address("Alabasta", 5678);
 
         client.setAddresses(Arrays.asList(address1, address2));
 
@@ -96,8 +97,8 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
     public void oneToManyFindByIdClient() {
         Optional<Client> optionalClient = clientRepository.findById(2L);
         optionalClient.ifPresent(client -> {
-            Address address1 = new Address("Sabaody",1234);
-            Address address2 = new Address("Alabasta",5678);
+            Address address1 = new Address("Sabaody", 1234);
+            Address address2 = new Address("Alabasta", 5678);
 
             client.setAddresses(Arrays.asList(address1, address2));
 
@@ -107,28 +108,28 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
     }
 
     public void oneToMany() {
-        Client client = new Client("Jhon","Doe");
+        Client client = new Client("Jhon", "Doe");
 
-        Address address1 = new Address("Sabaody",1234);
-        Address address2 = new Address("Alabasta",5678);
+        Address address1 = new Address("Sabaody", 1234);
+        Address address2 = new Address("Alabasta", 5678);
         client.getAddresses().add(address1);
         client.getAddresses().add(address2);
         Client clientDB = clientRepository.save(client);
         System.out.println(clientDB);
     }
 
-    public void manyToOne(){
-        Client client = new Client("Jhon","Doe");
+    public void manyToOne() {
+        Client client = new Client("Jhon", "Doe");
         clientRepository.save(client);
-        Invoice invoice = new Invoice("Invoice Office",2000L);
+        Invoice invoice = new Invoice("Invoice Office", 2000L);
         invoice.setClient(client);
         Invoice invoiceDB = invoiceRepository.save(invoice);
         System.out.println(invoiceDB);
     }
 
-    public void manyToOneFindByIdClient(){
+    public void manyToOneFindByIdClient() {
         Optional<Client> optionalClient = clientRepository.findById(1L);
-        if(optionalClient.isPresent()) {
+        if (optionalClient.isPresent()) {
             Client client = optionalClient.orElseThrow();
             Invoice invoice = new Invoice("Invoice Office", 2000L);
             invoice.setClient(client);
