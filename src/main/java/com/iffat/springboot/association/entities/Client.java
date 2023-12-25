@@ -16,7 +16,7 @@ public class Client {
     private String name;
     private String lastname;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     // @JoinColumn(name = "client_id")
     @JoinTable(
             name = "tbl_clients_to_addresses",
@@ -27,6 +27,7 @@ public class Client {
     private List<Address> addresses;
 
     public Client(Long id, String name, String lastname) {
+        this();
         this.id = id;
         this.name = name;
         this.lastname = lastname;

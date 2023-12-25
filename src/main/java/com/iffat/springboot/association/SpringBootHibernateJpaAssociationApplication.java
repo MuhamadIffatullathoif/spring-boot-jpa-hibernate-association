@@ -31,7 +31,48 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
         // manyToOne();
         // manyToOneFindByIdClient();
         // oneToMany();
-        oneToManyFindByIdClient();
+        // oneToManyFindByIdClient();
+        // removeAddress();
+        removeAddressFindById();
+    }
+
+    public void removeAddressFindById() {
+        Optional<Client> optionalClient = clientRepository.findById(1L);
+        optionalClient.ifPresent(optClient -> {
+            Address address1 = new Address("Sabaody",1234);
+            Address address2 = new Address("Alabasta",5678);
+
+            optClient.setAddresses(Arrays.asList(address1, address2));
+
+            Client clientDB = clientRepository.save(optClient);
+            System.out.println(clientDB);
+
+            Optional<Client> optionalClient2 = clientRepository.findOne(1L);
+            optionalClient2.ifPresent(optClient2 -> {
+                optClient2.getAddresses().remove(address1);
+                Client clientDB2 = clientRepository.save(optClient2);
+                System.out.println(clientDB2);
+            });
+        });
+    }
+
+    public void removeAddress() {
+        Client client = new Client("Jhon","Doe");
+
+        Address address1 = new Address("Sabaody",1234);
+        Address address2 = new Address("Alabasta",5678);
+
+        client.setAddresses(Arrays.asList(address1, address2));
+
+        Client clientDB = clientRepository.save(client);
+        System.out.println(clientDB);
+
+        Optional<Client> optionalClient = clientRepository.findById(3L);
+        optionalClient.ifPresent(opClient -> {
+            opClient.getAddresses().remove(address2);
+            clientRepository.save(opClient);
+            System.out.println(opClient);
+        });
     }
 
     public void oneToManyFindByIdClient() {
