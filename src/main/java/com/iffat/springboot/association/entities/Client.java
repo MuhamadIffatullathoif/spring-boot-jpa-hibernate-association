@@ -26,6 +26,9 @@ public class Client {
     )
     private List<Address> addresses;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "client")
+    private List<Invoice> invoices;
+
     public Client(Long id, String name, String lastname) {
         this();
         this.id = id;
@@ -41,6 +44,7 @@ public class Client {
 
     public Client() {
         addresses = new ArrayList<>();
+        invoices = new ArrayList<>();
     }
 
     public Long getId() {
@@ -75,6 +79,14 @@ public class Client {
         this.addresses = addresses;
     }
 
+    public List<Invoice> getInvoices() {
+        return invoices;
+    }
+
+    public void setInvoices(List<Invoice> invoices) {
+        this.invoices = invoices;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -82,6 +94,7 @@ public class Client {
                 ", name='" + name + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", addresses='" + addresses + '\'' +
+                ", invoices='" + invoices + '\'' +
                 '}';
     }
 }
