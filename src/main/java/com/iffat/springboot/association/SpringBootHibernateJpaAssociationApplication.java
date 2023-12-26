@@ -1,16 +1,12 @@
 package com.iffat.springboot.association;
 
-import com.iffat.springboot.association.entities.Address;
-import com.iffat.springboot.association.entities.Client;
-import com.iffat.springboot.association.entities.ClientDetails;
-import com.iffat.springboot.association.entities.Invoice;
-import com.iffat.springboot.association.repositories.ClientDetailsRepository;
-import com.iffat.springboot.association.repositories.ClientRepository;
-import com.iffat.springboot.association.repositories.InvoiceRepository;
+import com.iffat.springboot.association.entities.*;
+import com.iffat.springboot.association.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -25,6 +21,12 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
 
     @Autowired
     private ClientDetailsRepository clientDetailsRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringBootHibernateJpaAssociationApplication.class, args);
@@ -45,7 +47,104 @@ public class SpringBootHibernateJpaAssociationApplication implements CommandLine
         // oneToOne();
         // oneToOneFindById();
         // oneToOneBidirectional();
-        oneToOneBidirectionalFindById();
+        // oneToOneBidirectionalFindById();
+        // manyToMany();
+        // manyToManyFind();
+        // manyToManyRemoveFind();
+        manyToManyRemove();
+    }
+
+    public void manyToManyRemove() {
+        Student student1 = new Student("Jhon", "Doe");
+        Student student2 = new Student("Ton", "Doe");
+
+        Course course1 = new Course("Master Java Course","Steven");
+        Course course2 = new Course("Master Javascript Course","Steven");
+
+        student1.setCourses(Set.of(course1, course2));
+        student2.setCourses(Set.of(course2));
+
+        Iterable<Student> students = studentRepository.saveAll(List.of(student1, student2));
+        students.forEach(System.out::println);
+
+        Optional<Student> optionalStudentDB = studentRepository.findOneWithCourse(3L);
+
+        if(optionalStudentDB.isPresent()) {
+            Student student = optionalStudentDB.get();
+
+            Optional<Course> optionalCourseDB = courseRepository.findById(3L);
+
+            if(optionalCourseDB.isPresent()) {
+             Course courseDB = optionalCourseDB.get();
+             student.getCourses().remove(courseDB);
+                Student student3 = studentRepository.save(student);
+                System.out.println(student3);
+            }
+        }
+    }
+
+    public void manyToManyRemoveFind() {
+        Optional<Student> optionalStudent1 = studentRepository.findById(1L);
+        Optional<Student> optionalStudent2 = studentRepository.findById(2L);
+
+        Student student1 = optionalStudent1.get();
+        Student student2 = optionalStudent2.get();
+
+        Course course1 = courseRepository.findById(1L).get();
+        Course course2 = courseRepository.findById(2L).get();
+
+        student1.setCourses(Set.of(course1, course2));
+        student2.setCourses(Set.of(course2));
+
+        Iterable<Student> students = studentRepository.saveAll(List.of(student1, student2));
+        students.forEach(System.out::println);
+
+        Optional<Student> optionalStudentDB = studentRepository.findOneWithCourse(1L);
+        if(optionalStudentDB.isPresent()) {
+
+            Student studentDB = optionalStudentDB.get();
+            Optional<Course> optionalCourseDB = courseRepository.findById(2L);
+
+            if(optionalCourseDB.isPresent()) {
+                Course courseDB = optionalCourseDB.get();
+                studentDB.getCourses().remove(courseDB);
+
+                Student studentResponse = studentRepository.save(studentDB);
+                System.out.println(studentResponse);
+            }
+        }
+    }
+
+    public void manyToManyFind() {
+        Optional<Student> optionalStudent1 = studentRepository.findById(1L);
+        Optional<Student> optionalStudent2 = studentRepository.findById(2L);
+
+        Student student1 = optionalStudent1.get();
+        Student student2 = optionalStudent2.get();
+
+        Course course1 = courseRepository.findById(1L).get();
+        Course course2 = courseRepository.findById(2L).get();
+
+        student1.setCourses(Set.of(course1, course2));
+        student2.setCourses(Set.of(course2));
+
+        Iterable<Student> students = studentRepository.saveAll(List.of(student1, student2));
+        students.forEach(System.out::println);
+    }
+
+    @Transactional
+    public void manyToMany() {
+        Student student1 = new Student("Jhon", "Doe");
+        Student student2 = new Student("Ton", "Doe");
+
+        Course course1 = new Course("Master Java Course","Steven");
+        Course course2 = new Course("Master Javascript Course","Steven");
+
+        student1.setCourses(Set.of(course1, course2));
+        student2.setCourses(Set.of(course2));
+
+        Iterable<Student> students = studentRepository.saveAll(List.of(student1, student2));
+        students.forEach(System.out::println);
     }
 
     public void oneToOneBidirectionalFindById() {
