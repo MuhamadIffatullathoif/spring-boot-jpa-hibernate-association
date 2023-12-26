@@ -63,6 +63,16 @@ public class Student {
         this.courses = courses;
     }
 
+    public void addCourse(Course course) {
+        this.courses.add(course);
+        course.getStudents().add(this);
+    }
+
+    public void removeCourse(Course course) {
+        this.courses.remove(course);
+        course.getStudents().remove(this);
+    }
+
     @Override
     public String toString() {
         return "{" +

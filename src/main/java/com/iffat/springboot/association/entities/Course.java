@@ -17,10 +17,15 @@ public class Course {
     private String name;
     private String instructor;
 
+    @ManyToMany(mappedBy = "courses")
+    private Set<Student> students;
+
     public Course() {
+        students = new HashSet<>();
     }
 
     public Course(String name, String instructor) {
+        this();
         this.name = name;
         this.instructor = instructor;
     }
@@ -47,6 +52,14 @@ public class Course {
 
     public void setInstructor(String instructor) {
         this.instructor = instructor;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 
     @Override
